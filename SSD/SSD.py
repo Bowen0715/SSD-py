@@ -74,13 +74,13 @@ class Model:
         param = {"lambda1": self.lambda_, "lambda2": 0, "numThreads": -1, "mode": 2, "pos": True}
 
         # Initialize X and L
+        X_cpu = np.asfortranarray(X)
         X = self.X = tensor(X, dtype=torch.float32, device=device)
         L = self.L = tensor(L, dtype=torch.int32, device=device)
+        _, N = X.shape
         X_intercept = cat([torch.ones(1, N, device=device), X], dim=0)
 
         # Initialize D
-        _, N = X.shape
-        X_cpu = np.asfortranarray(X)
         FIX_D = D is not None  # Flag for whether to use the fixed dict mode
         if not FIX_D:
             D_init = spams.trainDL(X_cpu, **DLparam)
@@ -176,9 +176,9 @@ class Model:
                 L_hat = matmul(cat([A0tensor, A], dim=1), Z_intercept)
                 reg_mse = torch.mean((L_hat - L)**2)
 
-                print(f'Ite {ite} Object error: {trloss[ite].item()} Za err ratio: {X_approx_err_ra.item()} Z err ratio: {X_err_ra.item()} Reg MSE: {reg_mse.item()}')
+                print(f'Ite {ite+1} Object error: {trloss[ite].item()} Za err ratio: {X_approx_err_ra.item()} Z err ratio: {X_err_ra.item()} Reg MSE: {reg_mse.item()}')
             else:
-                print(f'Ite {ite} Object error: {trloss[ite].item()} Za err ratio: {X_approx_err_ra.item()} Z err ratio: {X_err_ra.item()}')
+                print(f'Ite {ite+1} Object error: {trloss[ite].item()} Za err ratio: {X_approx_err_ra.item()} Z err ratio: {X_err_ra.item()}')
 
         self.X_approx_err_ra = X_approx_err_ra
         self.X_err_ra = X_err_ra
