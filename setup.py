@@ -4,7 +4,7 @@ setup(
     author="Bowen Jin",
     author_email="bowenjin@stu.njmu.edu.cn",
     version="0.0.1",
-    name="SSD",
+    name="SSD-py",
     packages=find_packages(),
     install_requires=[
         "numpy",
